@@ -6,19 +6,21 @@ SET(SOS_SRCS
   qgssosdata.cpp
   qgssosfeatureiterator.cpp
   qgssosprovider.cpp
+  qgsxmldata.cpp
 )
 
-#SET (SOS_MOC_HDRS
-#  qgssosdata.h
-#)
+SET (SOS_MOC_HDRS
+  qgsxmldata.h
+)
 
 ########################################################
 # Build
 
-#QT4_WRAP_CPP(SOS_MOC_SRCS ${SOS_MOC_HDRS})
+QT4_WRAP_CPP(SOS_MOC_SRCS ${SOS_MOC_HDRS})
 
 INCLUDE_DIRECTORIES (
   ../../core
+  ../../core/geometry
 #  ../../gui
 #  ${CMAKE_CURRENT_BINARY_DIR}/../../ui
 #  ${GEOS_INCLUDE_DIR}
@@ -26,7 +28,7 @@ INCLUDE_DIRECTORIES (
   ${EXPAT_INCLUDE_DIR}
 )
 
-ADD_LIBRARY (sosprovider MODULE ${SOS_SRCS} ) # ${SOS_MOC_SRCS} )
+ADD_LIBRARY (sosprovider MODULE ${SOS_SRCS} ${SOS_MOC_SRCS} )
 
 TARGET_LINK_LIBRARIES (sosprovider
   ${EXPAT_LIBRARY}
