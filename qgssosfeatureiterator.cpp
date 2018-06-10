@@ -44,7 +44,7 @@ QgsFeatureIterator QgsSOSFeatureSource::getFeatures( const QgsFeatureRequest& re
   return new QgsSOSFeatureIterator( this, request );
 }
 
-QgsSOSFeatureIterator::QgsSOSFeatureIterator( QgsSOSFeatureSource* source, const QgsFeatureRequest& request ): QgsAbstractFeatureIteratorFromSource( source, false, request ),
+QgsSOSFeatureIterator::QgsSOSFeatureIterator( QgsSOSFeatureSource* source, const QgsFeatureRequest& request ): QgsAbstractFeatureIteratorFromSource<QgsSOSFeatureSource>( source, false, request ),
     mSource( source )
 {
   if ( !mSource )
@@ -69,7 +69,7 @@ QgsSOSFeatureIterator::QgsSOSFeatureIterator( QgsSOSFeatureSource* source, const
 
 QgsSOSFeatureIterator::~QgsSOSFeatureIterator()
 {
-
+    close();
 }
 
 bool QgsSOSFeatureIterator::fetchFeature( QgsFeature& f )
