@@ -18,6 +18,10 @@
 #ifndef QGSSOSDATA_H
 #define QGSSOSDATA_H
 
+#ifndef M_PI
+#define M_PI 3.1415926535897931159979634685
+#endif
+
 #include "qgsfeature.h"
 #include "qgsxmldata.h"
 #include <QMap>
