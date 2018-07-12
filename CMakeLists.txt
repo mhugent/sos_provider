@@ -1,11 +1,10 @@
 find_package( Qt4 REQUIRED )
 
-SET ( QGIS_DIR "C:/Program Files/QGIS 2 18" CACHE PATH "Path to QGIS installation")
+SET ( QGIS_INCLUDE_DIR "C:/Program Files/QGIS 2 18/include" CACHE PATH "Path to QGIS include directory")
+SET ( QGIS_CORE_LIB "C:/Program Files/QGIS 2 18/lib/qgis_core.lib" CACHE PATH "QGIS core library" )
 SET ( EXPAT_INCLUDE_DIR "" CACHE PATH "Path to Expat include files" )
 SET ( EXPAT_LIBRARY "" CACHE FILEPATH "Path to libexpat")
-SET ( QWT_INCLUDE_DIR "" CACHE PATH "Path to QWT include files" )
-#SET ( GEOS_LIBRARY "" CACHE FILEPATH "Path to GEOS lib")
-#SET ( GEOS_INCLUDE_DIR "" CACHE PATH "Path to geos include directory" )
+SET ( QT_INCLUDE_DIR "" CACHE PATH "Path to Qt include directory" )
 SET ( QT_LIB_DIR "" CACHE PATH "Path to the directory containing the Qt libraries")
 
 
@@ -29,7 +28,7 @@ SET (SOS_MOC_HDRS
 QT4_WRAP_CPP(SOS_MOC_SRCS ${SOS_MOC_HDRS})
 
 INCLUDE_DIRECTORIES (
-  ${QGIS_DIR}/include
+  ${QGIS_INCLUDE_DIR}
   ${EXPAT_INCLUDE_DIR}
   ${QT_INCLUDE_DIR}/QtCore
   ${QT_INCLUDE_DIR}/QtGui
@@ -45,17 +44,26 @@ IF (WIN32)
 	ADD_DEFINITIONS( -DCORE_EXPORT=__declspec\(dllimport\))
 	ADD_DEFINITIONS( -DGUI_EXPORT=__declspec\(dllimport\))
 	ADD_DEFINITIONS( -Dnoexcept= )
+ELSE()
+  ADD_DEFINITIONS( -DCORE_EXPORT= )
+	ADD_DEFINITIONS( -DGUI_EXPORT= )
 ENDIF (WIN32)
 
-TARGET_LINK_LIBRARIES (sosprovider
-  ${QGIS_DIR}/lib/qgis_core.lib
-  ${QGIS_DIR}/lib/qgis_gui.lib
+IF (WIN32)
+  TARGET_LINK_LIBRARIES (sosprovider
+  ${QGIS_CORE_LIB}
   ${EXPAT_LIBRARY}
   ${QT_LIB_DIR}/QtCore4.lib
   ${QT_LIB_DIR}/QtGui4.lib
   ${QT_LIB_DIR}/QtNetwork4.lib
-  ${QT_LIB_DIR}/QtXml4.lib
-)
+  ${QT_LIB_DIR}/QtXml4.lib )
+ELSE()
+  TARGET_LINK_LIBRARIES (sosprovider
+  ${QT_LIB_DIR}/libQtCore.so
+  ${QT_LIB_DIR}/libQtGui.so
+  ${QT_LIB_DIR}/libQtNetwork.so
+  ${QT_LIB_DIR}/libQtXml.so )
+ENDIF(WIN32)
 
 
 ########################################################
