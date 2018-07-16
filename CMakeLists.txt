@@ -7,6 +7,7 @@ SET ( EXPAT_LIBRARY "" CACHE FILEPATH "Path to libexpat")
 SET ( QT_INCLUDE_DIR "" CACHE PATH "Path to Qt include directory" )
 SET ( QT_LIB_DIR "" CACHE PATH "Path to the directory containing the Qt libraries")
 
+SET (CMAKE_CXX_STANDARD 11)
 
 ########################################################
 # Files
