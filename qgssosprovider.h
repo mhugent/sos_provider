@@ -31,19 +31,19 @@ class QgsSOSProvider: public QgsVectorDataProvider
     QgsSOSProvider( const QString& uri );
     ~QgsSOSProvider();
 
-    QgsFeatureIterator getFeatures( const QgsFeatureRequest& request = QgsFeatureRequest() );
+    QgsFeatureIterator getFeatures( const QgsFeatureRequest& request = QgsFeatureRequest() ) const override;
 
     virtual QgsAbstractFeatureSource* featureSource() const;
 
     //abstract methods QgsVectorDataProvider
-    QGis::WkbType geometryType() const;
+    QgsWkbTypes::Type wkbType() const override;
     long featureCount() const;
-    const QgsFields &fields() const;
+    QgsFields fields() const override;
 
     //abstract methods QgsDataProvider
-    QgsCoordinateReferenceSystem crs();
-    QgsRectangle extent();
-    bool isValid();
+    QgsCoordinateReferenceSystem crs() const override;
+    QgsRectangle extent() const override;
+    bool isValid() const override;
     QString name() const;
     QString description() const;
 

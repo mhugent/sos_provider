@@ -69,15 +69,15 @@ QgsAbstractFeatureSource* QgsSOSProvider::featureSource() const
   return new QgsSOSFeatureSource( this );
 }
 
-QgsFeatureIterator QgsSOSProvider::getFeatures( const QgsFeatureRequest& request )
+QgsFeatureIterator QgsSOSProvider::getFeatures( const QgsFeatureRequest& request ) const
 {
   QgsSOSFeatureSource* source = new QgsSOSFeatureSource( this );
   return QgsFeatureIterator( new QgsSOSFeatureIterator( source, request ) );
 }
 
-QGis::WkbType QgsSOSProvider::geometryType() const
+QgsWkbTypes::Type QgsSOSProvider::wkbType() const
 {
-  return QGis::WKBPoint;
+  return QgsWkbTypes::Point;
 }
 
 long QgsSOSProvider::featureCount() const
@@ -85,24 +85,24 @@ long QgsSOSProvider::featureCount() const
   return mFeatures.size();
 }
 
-const QgsFields& QgsSOSProvider::fields() const
+QgsFields QgsSOSProvider::fields() const
 {
   return mFields;
 }
 
-QgsCoordinateReferenceSystem QgsSOSProvider::crs()
+QgsCoordinateReferenceSystem QgsSOSProvider::crs() const
 {
   QgsCoordinateReferenceSystem crs;
   crs.createFromId( 4326, QgsCoordinateReferenceSystem::EpsgCrsId );
   return crs;
 }
 
-QgsRectangle QgsSOSProvider::extent()
+QgsRectangle QgsSOSProvider::extent() const
 {
   return mExtent;
 }
 
-bool QgsSOSProvider::isValid()
+bool QgsSOSProvider::isValid() const
 {
   return mValid;
 }

@@ -52,6 +52,28 @@ QgsSOSFeatureIterator::QgsSOSFeatureIterator( QgsSOSFeatureSource* source, const
     return;
   }
 
+  mSelectedFeatures.clear();
+  QgsRectangle rectFilter = request.filterRect();
+  if( !rectFilter.isNull() )
+  {
+      mSelectedFeatures.append( mSource->mSpatialIndex->intersects( rectFilter ) );
+  }
+
+  if( request.filterType() == QgsFeatureRequest::FilterFid )
+  {
+      mSelectedFeatures.append( request.filterFid() );
+  }
+  if( request.filterType() == QgsFeatureRequest::FilterFids )
+  {
+      mSelectedFeatures.append( request.filterFids().toList() );
+  }
+
+  if( rectFilter.isNull() && request.filterType() == QgsFeatureRequest::FilterNone )
+  {
+     mSelectedFeatures = mSource->mFeatures.keys();
+  }
+
+  /*
   switch ( request.filterType() )
   {
     case QgsFeatureRequest::FilterRect:
@@ -63,7 +85,8 @@ QgsSOSFeatureIterator::QgsSOSFeatureIterator( QgsSOSFeatureSource* source, const
     case QgsFeatureRequest::FilterNone:
     default: //QgsFeatureRequest::FilterNone
       mSelectedFeatures = mSource->mFeatures.keys();
-  }
+  }*/
+
   mFeatureIterator = mSelectedFeatures.constBegin();
 }
 
@@ -116,14 +139,10 @@ void QgsSOSFeatureIterator::copyFeature( QgsFeature* f, QgsFeature& feature, boo
   }
 
   //copy the geometry
-  QgsGeometry* geometry = f->geometry();
-  if ( geometry && fetchGeometry )
+  QgsGeometry geometry = f->geometry();
+  if ( !geometry.isEmpty() && fetchGeometry )
   {
-    const unsigned char *geom = geometry->asWkb();
-    int geomSize = geometry->wkbSize();
-    unsigned char* copiedGeom = new unsigned char[geomSize];
-    memcpy( copiedGeom, geom, geomSize );
-    feature.setGeometryAndOwnership( copiedGeom, geomSize );
+    feature.setGeometry( geometry );
   }
   else
   {
@@ -143,8 +162,8 @@ void QgsSOSFeatureIterator::copyFeature( QgsFeature* f, QgsFeature& feature, boo
 
   //id and valid
   feature.setValid( true );
-  feature.setFeatureId( f->id() );
-  feature.setFields( &( mSource->mFields ) ); // allow name-based attribute lookups
+  feature.setId( f->id() );
+  feature.setFields( mSource->mFields ); // allow name-based attribute lookups
 }
 
 

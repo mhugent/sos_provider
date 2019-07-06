@@ -147,7 +147,7 @@ void QgsSOSData::endElement( const XML_Char* el )
       //coordinates swapped
       double y = coordList.at( 0 ).toDouble();
       double x = coordList.at( 1 ).toDouble();
-      mCurrentFeature->setGeometry( QgsGeometry::fromPoint( QgsPoint( x, y ) ) );
+      mCurrentFeature->setGeometry( QgsGeometry::fromPointXY( QgsPointXY( x, y ) ) );
       if ( mExtent )
       {
         mExtent->combineExtentWith( x, y );
